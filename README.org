@@ -128,8 +128,7 @@ To create a =cart= record, we just do:
               :on-create (fn [{:keys [id]}]
                           (gql/subscribe! :cart
                                           {:input {:id :id}
-                                           :on-change (fn [updated-cart]
-                                                        (rf/dispatch ::events/cart updated-cart))}))})
+                                           :on-change #(rf/dispatch ::events/cart %)}))})
 #+END_SRC
 
 Notice that in the =on-create= callback function, we subscribe to the
