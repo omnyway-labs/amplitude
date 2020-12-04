@@ -128,7 +128,7 @@ for example, could use reframe's dispatch and mutate the appdb.
 
 Let us say we have a =pay= button, when clicked, needs to trigger some
 Payment processing business logic - perhaps in a secure cloud or VPC. Appsync
-resolves this mutation to any defined Resolver (HTTP API, Lambda or databases).
+resolves this mutation to any defined Resolver (HTTP API, Lambda, RDS or DynamoDB).
 The following defines the =pay= mutation to be resolved via a Lambda
 called "payment-processor"
 
@@ -143,8 +143,8 @@ type mutation {
 
 In the above schema, the =pay= mutation has a =@function= directive which
 defines the backend resolver for this mutation.
-We assume here that "payment-processor" AWS Lambda is provisioned
-either via amplify-cli or some other mechansim.
+We assume here that "payment-processor" AWS Lambda is already
+provisioned and deployed.
 The function name can be suffixed with a "-{env}" template variable
 too, if needed.
 
