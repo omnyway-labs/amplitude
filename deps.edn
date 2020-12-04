@@ -1,0 +1,16 @@
+{:aliases
+ {:dev
+  {:extra-deps
+   {thheller/shadow-cljs {:mvn/version "2.8.110"}}
+   :extra-paths ["test" "src"]}}
+ :deps
+ {org.clojure/clojurescript
+  {:exclusions  [com.google.javascript/closure-compiler-unshaded
+                 org.clojure/google-closure-library
+                 org.clojure/google-closure-library-third-party]
+   :mvn/version "1.10.741"}
+  district0x/graphql-query    {:mvn/version "1.0.6"}
+  camel-snake-kebab           {:mvn/version "0.4.1"},
+  com.andrewmcveigh/cljs-time {:mvn/version "0.5.2"}
+  lambdaisland/glogi          {:mvn/version "1.0.63"}}
+ :paths ["src"]}

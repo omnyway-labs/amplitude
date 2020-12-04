@@ -1,0 +1,4 @@
+{:deps true
+ :builds {:test {:target     :node-test
+                 :output-to "dist/node-test.js"
+                 :autorun true}}}
