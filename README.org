@@ -173,7 +173,7 @@ Notice filter takes a map that supports most graphql filters (eq,
 contains, between, starts-with, and, or etc). Filters are clojure
 maps with prefix operators
 
-=amplitude= also supports searches on Global Secondary Indexes
+=amplitude= also supports searches using Global Secondary Indexes(GSI)
 
 For example, let us extend the Cart model to include a GSI on
 shopper-id
@@ -235,7 +235,7 @@ user as follows
 This token can be used subsequently as Authorization header in REST
 api requests. See =amplitude.rest=
 
-** REST API Requests
+** Simplified REST Client
 
 =amplitude.rest= provides functions to invoke http requests as
 authenticated users using jwt-tokens.
@@ -252,9 +252,10 @@ The callbacks =on-success= or =on-error= could be any arbitrary
 function
 
 
-** Storage
+** S3 Storage Abstraction
 
-=amplitude.storage= provides idiomatic apis
+=amplitude.storage= provides idiomatic apis to put and get objects from
+S3 Storage.
 
 #+BEGIN_SRC clojure
 (require [amplitude.storage :as storage])[
