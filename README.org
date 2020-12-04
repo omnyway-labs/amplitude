@@ -28,6 +28,19 @@ keys needed to invoke Graphql queries, storage requests etc.
 aws-exports.js config file. Initialize the config before invoking any
 other amplitude API
 
+Typically, the aws-exports.js file looks something like this
+
+#+begin_src js
+const awsmobile = {
+    "aws_project_region": "us-east-1",
+    "aws_appsync_graphqlEndpoint": "http://localhost:20002/graphql",
+    "aws_appsync_region": "us-east-1",
+    "aws_appsync_authenticationType": "API_KEY",
+    "aws_appsync_apiKey": "da2-fakeApiId123456"
+};
+export default awsmobile;
+#+end_src
+
 #+BEGIN_SRC clojure
 (:require
   [amplitude.config :as config]
