@@ -117,7 +117,8 @@ subscribing to those mutations using the above Schema.
 While amplify-cli provides a mechanism to generate js/typescript code,
 the generated code is non-performant when there are deep graphql
 connections. Amplitude generates the graphql handler code dynamically
-during request time based on the shape of data requested.
+during request-time based on the shape of data specified. =shape= has no
+limitation on the depth of the graph and can be shallow.
 
 To create a =cart= record, we just do:
 
