@@ -206,8 +206,8 @@ like this
  "fieldName": "pay"}
  #+end_src
 
- Having these mutations get resolved via tiny Lambda processes (in any
- language) makes to easier to write bite-sized business-logic code or
+ Having these mutations be resolved via tiny Lambda processes (in any
+ language) makes it easier to write bite-sized business-logic code or
  mutations in an efficient way.
 
 Meanwhile, we have the frontend cljs app subscribe to updates on
