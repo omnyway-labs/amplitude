@@ -1,0 +1,7 @@
+
+This docker container provides useful utilities to run amplitude tests
+and deploys in CI
+
+#+begin_src sh
+docker build . -t my/amplify-cljs
+#+end_src
