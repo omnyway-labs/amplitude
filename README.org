@@ -127,15 +127,15 @@ To create a =cart= record, we just do:
               :shape [:id]
               :on-create (fn [{:keys [id]}]
                           (gql/subscribe! :cart
-                                          {:id :id}
-                                          (fn [updated-cart]
-                                            (rf/dispatch ::events/cart updated-cart))))})
+                                          {:input {:id :id}
+                                           :on-change (fn [updated-cart]
+                                                        (rf/dispatch ::events/cart updated-cart))}))})
 #+END_SRC
 
 Notice that in the =on-create= callback function, we subscribe to the
 cart changes.
-The subscription function passed as arg to =gql/subscribe!=
-gets called whenever the cart is updated. The subscription callback-fn,
+The =on-change= function passed as arg to =gql/subscribe!= gets called
+whenever the cart is updated. The =on-change= callback-fn,
 for example, could use reframe's dispatch and mutate the appdb.
 
 Let us say we have a =pay= button, when clicked, needs to trigger some
