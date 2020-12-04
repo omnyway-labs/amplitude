@@ -1,4 +1,5 @@
-Amplifying Clojurescript on AWS
+Amplifying Clojurescript on AWS.
+=amplitude= provides a set of utilities to work with amplify-js seemlessly
 
 * Getting Started
 
@@ -9,22 +10,22 @@ Add following to deps.edn or your cljs deps file
          :sha "7d39971d89780c20c64ce34277b3a8c276704b16"}}}
 #+end_src
 
-Install amplify-cli. See here to get started
+Install amplify-cli and get started
 https://docs.amplify.aws/cli/start/install
 
-This library expects basic familiarity in getting started with AWS
-Amplify. It also expects to have a local src/aws-exports.js file
-to load and invoke the APIs.
+This library expects the user to have basic familiarity in getting
+started with AWS  Amplify. It also expects a local src/aws-exports.js
+file to load and invoke the APIs.
 The aws-exports.js file contains the resource identifiers, urls and
 keys needed to invoke Graphql queries, storage requests etc.
-
 
 * API
 
 ** Config
 
 =amplitude.config= provides handy functions to initialize the
-aws-exports.js config file
+aws-exports.js config file. Initialize the config before invoking any
+other amplitude API
 
 #+BEGIN_SRC clojure
 (:require
@@ -43,15 +44,15 @@ aws-exports.js config file
 =amplitude.graphql= provides abstractions to query, mutate and search Appsync backends
 via graphql. The backends can be anything - HTTP server, DynamoDB,
 RDS, Lambda etc.
-The graphql queries are generated dynamically during invocation time.
-The generated code from Amplify is not used for performance reasons.
+
 
 #+BEGIN_SRC clojure
 (require [amplitude.api.graphql :as gql])
 (gql/init!)
 #+END_SRC
 
-To understand the usage of these functions, let us take the classic =Cart= example
+Let us take the classic =Cart= example. The following is a Graphql
+Schema defining the Cart and Payment models. The =@model=
 
 #+BEGIN_SRC graphql
 type Cart @model{
@@ -80,6 +81,17 @@ type subscription {
 }
 
 #+END_SRC
+
+The above schema can be deployed via amplify-cli. Deloying the schema
+is beyond the scope of this library. Please see
+https://docs.amplify.aws/cli/graphql-transformer/overview#create-a-graphql-api
+
+
+The following set of examples demonstrate querying, mutating and
+subscribing to those mutations. While amplify-cli provides a mechanism to
+generate js/typescript code, the generated code is non-performant when
+having deep graphql connections. Amplitude generates the graphql
+handler code dynamically during invocation time.
 
 To create a =cart= record, we just do:
 
@@ -119,7 +131,8 @@ In the above schema, the =pay= mutation has a =@function= directive which
 defines the backend resolver for this mutation.
 We assume here that "payment-processor" AWS Lambda is provisioned
 either via amplify-cli or some other mechansim.
-The function name can be annotated with a "-{env}" template variable too.
+The function name can be suffixed with a "-{env}" template variable
+too, if needed.
 
 #+BEGIN_SRC clojure
 (gql/resolve! :pay
@@ -151,11 +164,11 @@ function
 In the above code, the backend lambda process creates a payment
 record and in the =on-create= callback-fn it updates the cart with the
 payment-id.
-=payment-id*= is syntactic sugar to hint that it is a connection to a
+=payment-id*= is syntactic sugar to denote a connection to a
 payment type/record. Notice in the Cart type, we do not have an
 explicit payment-id field.
 
-All along, we had the frontend cljs app subscribe to updates on
+Meanwhile, we had the frontend cljs app subscribe to updates on
 the cart. When the payment-processor lambda mutates the cart, the
 subscription handler fn gets invoked.
 
@@ -166,12 +179,13 @@ simplest form is =gql/list=
 (gql/list :payment
           {:filter {:cart-id {:eq "cart1"}}
            :shape [:id [:card [:name]]]
+           :limit 100
            :on-list #(rf/dispatch ::to-some-fx)})
 #+end_src
 
 Notice =filter= takes a map that supports most graphql filters (eq,
 contains, between, starts-with, and, or etc). Filters are clojure
-maps with prefix operators
+maps with prefix operators.
 
 =amplitude= also supports searches using Global Secondary Indexes(GSI).
 For example, let us extend the Cart model to include a GSI on
@@ -308,19 +322,6 @@ and SessionStorage. This is useful when caching resultsets
 (cache/get :foo)
 (cache/delete! :foo)
 (cache/clear!)
-#+end_src
-
-* Running Example
-
-#+begin_src sh
-
-cd example
-amplify init
-amplify add function payment-processor
-amplify add api graphql #  use schema.graphql
-amplify push
-
-yarn && shadow-cljs -A:dev watch app
 #+end_src
 
 * License - Apache 2.0
