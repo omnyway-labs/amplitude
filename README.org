@@ -12,7 +12,7 @@ Add following to deps.edn or your cljs deps file
 Install amplify-cli. See here to get started
 https://docs.amplify.aws/cli/start/install
 
-This library expects some familiarity in getting started with AWS
+This library expects basic familiarity in getting started with AWS
 Amplify. It also expects to have a local src/aws-exports.js file
 to load and invoke the APIs.
 The aws-exports.js file contains the resource identifiers, urls and
@@ -212,7 +212,7 @@ the sorted resultset. =shape= specifies the keys or nodes in the Graph
 to return. In the above example, =on-search= returns a vector of maps
 
 #+begin_src clojure
-[{:id "xx" :payment {:card {:name "my-card"}}}]
+[{:id "xx" :shopper-id  "my-shopper-id" :payment {:card {:name "my-card"}}}]
 #+end_src
 
 ** Cognito-based Authentication
