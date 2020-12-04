@@ -24,7 +24,7 @@ keys needed to invoke Graphql queries, storage requests etc.
 
 ** Config
 
-=amplitude.config= provides handy functions to initialize the
+=amplitude.config= provides an utility function to initialize the
 aws-exports.js config file. Initialize the config before invoking any
 other amplitude API
 
