@@ -52,12 +52,23 @@ RDS, Lambda etc.
 (gql/init!)
 #+END_SRC
 
-Let us take the classic =Cart= example. The following is a Graphql
-Schema defining the Cart and Payment models. The =@model=
+Let us take the classic Shopper =Cart= example. The following is a Graphql
+Schema defining the Cart and Payment models. The =@model= directive
+implies that the defined type has a corresponding backend table - by
+default it is DynamoDB. AWS AppSync knows how to resolve these
+directives.
 
 #+BEGIN_SRC graphql
+
+type LineItem {
+  name: String
+  quantity: Int
+  price: Int
+}
+
 type Cart @model{
   id: ID!
+  shopper-id: String!
   line_items: [LineItem]
   payment: Payment @connection
   tax: Int
@@ -89,17 +100,19 @@ https://docs.amplify.aws/cli/graphql-transformer/overview#create-a-graphql-api
 
 
 The following set of examples demonstrate querying, mutating and
-subscribing to those mutations. While amplify-cli provides a mechanism to
-generate js/typescript code, the generated code is non-performant when
-having deep graphql connections. Amplitude generates the graphql
-handler code dynamically during invocation time.
+subscribing to those mutations using the above Schema.
+While amplify-cli provides a mechanism to generate js/typescript code,
+the generated code is non-performant when having deep graphql
+connections. Amplitude generates the graphql handler code dynamically
+during invocation time.
 
 To create a =cart= record, we just do:
 
 #+BEGIN_SRC clojure
 (gql/create! :cart
              {:input {:line-items items
-                      :total      total}
+                      :total      total
+                      :shopper-id shopper-id}
               :shape [:id]
               :on-create (fn [{:keys [id]}]
                           (gql/subscribe! :cart
@@ -110,12 +123,12 @@ To create a =cart= record, we just do:
 Notice that in the =on-create= callback function, we subscribe to the
 cart changes.
 The subscription function passed as arg to =gql/subscribe!=
-gets called whenever the cart is updated. The on-subscribe function,
+gets called whenever the cart is updated. The subscription callback-fn,
 for example, could use reframe's dispatch and mutate the appdb.
 
-Let us say we had a =pay= button that needs to trigger some
-business logic - perhaps in a secure cloud or VPC. Appsync resolves
-this mutation to any defined Resolver (HTTP API, Lambda or databases).
+Let us say we have a =pay= button, when clicked, needs to trigger some
+Payment processing business logic - perhaps in a secure cloud or VPC. Appsync
+resolves this mutation to any defined Resolver (HTTP API, Lambda or databases).
 The following defines the =pay= mutation to be resolved via a Lambda
 called "payment-processor"
 
@@ -184,11 +197,11 @@ simplest form is =gql/list=
            :on-list #(rf/dispatch ::to-some-fx)})
 #+end_src
 
-Notice =filter= takes a map that supports most graphql filters (eq,
+Notice that =filter= takes a map that supports most graphql filters (eq,
 contains, between, starts-with, and, or etc). Filters are clojure
 maps with prefix operators.
 
-=amplitude= also supports searches using Global Secondary Indexes(GSI).
+=amplitude= also supports =search= using Global Secondary Indexes(GSI).
 For example, let us extend the Cart model to include a GSI on
 shopper-id
 
