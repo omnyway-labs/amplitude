@@ -40,7 +40,7 @@ aws-exports.js config file
 
 ** AppSync GraphQL APIs
 
-Provides abstractions to query, mutate and search Appsync backends
+=amplitude.graphql= provides abstractions to query, mutate and search Appsync backends
 via graphql. The backends can be anything - HTTP server, DynamoDB,
 RDS, Lambda etc.
 The graphql queries are generated dynamically during invocation time.
@@ -51,10 +51,7 @@ The generated code from Amplify is not used for performance reasons.
 (gql/init!)
 #+END_SRC
 
-=amplitude.graphql= provides a set of useful functions to query AppSync
-Graphql Entities.
-
-To show the usage of these functions, let us take the classic =Cart= example
+To understand the usage of these functions, let us take the classic =Cart= example
 
 #+BEGIN_SRC graphql
 type Cart @model{
