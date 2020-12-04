@@ -1,0 +1,13 @@
+{:deps   true
+ :nrepl  {:port 9002}
+ :builds {:app {:target     :browser
+                :output-dir "public/js"
+                :closure-defines {amplitude.config/GQL_LOCAL #shadow/env "GQL_LOCAL"}
+                :asset-path "/js"
+                :modules    {:app {:init-fn amplitude.example/init}}
+                :devtools   {:http-root "public"
+                             :http-port 8080}}
+          :script {:target    :node-script
+                   :main      amplitude.example.schema-generator/main
+                   :output-to "target/script.js"
+                   :autorun   true}}}

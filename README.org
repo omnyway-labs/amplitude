@@ -342,5 +342,4 @@ limitations under the License.
 
 * Thanks
 
-- district0x for the awesome graphql-query library
-- Abhik Kanra @trycatcher (contributor)
+- district0x for graphql-query library https://github.com/district0x/graphql-query

@@ -1,0 +1,25 @@
+{
+    "devDependencies": {
+        "shadow-cljs": "2.10.7"
+    },
+    "dependencies": {
+        "@aws-amplify/analytics": "3.1.9",
+        "@aws-amplify/api": "3.1.17",
+        "@aws-amplify/auth": "3.2.14",
+        "@aws-amplify/cache": "3.1.17",
+        "@aws-amplify/core": "3.4.0",
+        "@aws-amplify/storage": "3.2.7",
+        "aws-amplify": "3.0.18",
+        "events": "3.1.0",
+        "highlight.js": "9.18.1",
+        "jquery": "3.4.1",
+        "moment": "2.26.0",
+        "process": "0.11.10",
+        "qs": "6.9.4",
+        "react": "16.9.0",
+        "react-dom": "16.9.0",
+        "url": "0.11.0"
+    },
+    "name": "review",
+    "license": "MIT"
+}

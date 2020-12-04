@@ -1,0 +1,31 @@
+type Cart {
+  id: ID!
+  line_items: [BagLineItem]
+  payment: Payment @connection
+  tax: Int
+  total: Int
+}
+
+type Card {
+  id: ID!
+
+}
+
+type Payment {
+  id: ID!
+  card: Card @connection
+  amount: Int
+  status: PaymentStatus!
+}
+
+type mutation {
+  pay(
+    card_id: String!
+    amount: Int
+  ): String @function(name: "payment-processor")
+}
+
+type subscription {
+  subscribeBag(id:String): Cart
+  @aws_subscribe(mutations: ["updateCart"])
+}
