@@ -169,12 +169,11 @@ simplest form is =gql/list=
            :on-list #(rf/dispatch ::to-some-fx)})
 #+end_src
 
-Notice filter takes a map that supports most graphql filters (eq,
+Notice =filter= takes a map that supports most graphql filters (eq,
 contains, between, starts-with, and, or etc). Filters are clojure
 maps with prefix operators
 
 =amplitude= also supports searches using Global Secondary Indexes(GSI)
-
 For example, let us extend the Cart model to include a GSI on
 shopper-id
 
@@ -196,7 +195,7 @@ type Cart @model
 }
 #+end_src
 
-The =@key= directive defines GSIs with a key and a sort-key. In this
+The =@key= directive defines GSI with a key and a sort-key. In this
 case, the sort-key is createdAt
 
 #+begin_src clojure
@@ -207,7 +206,7 @@ case, the sort-key is createdAt
              :on-search #(rf/dispatch ::some-event %)})
 #+end_src
 
-gql/search also takes an optional =filter= that applies the filter on
+gql/search also takes an optional =:filter= that applies the filter on
 the sorted resultset.
 
 ** Cognito-based Authentication
