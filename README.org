@@ -12,9 +12,9 @@ Add following to deps.edn or your cljs deps file
 Install amplify-cli. See here to get started
 https://docs.amplify.aws/cli/start/install
 
-This library expects some familiarity with getting started with AWS
-Amplify. It also expects to have a local src/aws-exports.js to load
-and invoke the APIs.
+This library expects some familiarity in getting started with AWS
+Amplify. It also expects to have a local src/aws-exports.js file
+to load and invoke the APIs.
 The aws-exports.js file contains the resource identifiers, urls and
 keys needed to invoke Graphql queries, storage requests etc.
 
