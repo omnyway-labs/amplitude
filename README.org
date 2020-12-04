@@ -84,8 +84,6 @@ type Cart @model{
   shopper-id: String!
   line_items: [LineItem]
   payment: Payment @connection
-  tax: Int
-  total: Int
 }
 
 type Payment @model{
@@ -125,7 +123,6 @@ To create a =cart= record, we just do:
 #+BEGIN_SRC clojure
 (gql/create! :cart
              {:input {:line-items items
-                      :total      total
                       :shopper-id shopper-id}
               :shape [:id]
               :on-create (fn [{:keys [id]}]
