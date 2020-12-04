@@ -102,7 +102,7 @@ https://docs.amplify.aws/cli/graphql-transformer/overview#create-a-graphql-api
 The following set of examples demonstrate querying, mutating and
 subscribing to those mutations using the above Schema.
 While amplify-cli provides a mechanism to generate js/typescript code,
-the generated code is non-performant when having deep graphql
+the generated code is non-performant when there are deep graphql
 connections. Amplitude generates the graphql handler code dynamically
 during invocation time.
 
@@ -165,18 +165,6 @@ and associate the payment-id with the cart. Assuming we are running
 cljs+amplitude in the lambda, we could do the following in the Lambda
 function
 
-The payment-processor lambda gets an input event that looks something
-like this
-
-#+begin_src js
-{"arguments": {"card-id": "card-123", "cart-id" "xxx", "amount": 100},
- "fieldName": "pay"}
- #+end_src
-
- Having these mutations get resolved via tiny Lambda processes (in any
- language) makes to easier to write bite-sized business-logic code or
- mutations in an efficient way.
-
 #+begin_src clojure
 (gql/create! :payment
              {:input     {:cart-id "xxx"
@@ -194,6 +182,19 @@ payment-id.
 =payment-id*= is syntactic sugar to denote a connection to a
 payment type/record. Notice in the Cart type, we do not have an
 explicit payment-id field.
+
+The payment-processor lambda gets an input event that looks something
+like this
+
+#+begin_src js
+{"arguments": {"card-id": "card-123", "cart-id" "xxx", "amount": 100},
+ "fieldName": "pay"}
+ #+end_src
+
+ Having these mutations get resolved via tiny Lambda processes (in any
+ language) makes to easier to write bite-sized business-logic code or
+ mutations in an efficient way.
+
 
 Meanwhile, we had the frontend cljs app subscribe to updates on
 the cart. When the payment-processor lambda mutates the cart, the
