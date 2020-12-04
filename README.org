@@ -81,7 +81,7 @@ type LineItem {
 
 type Cart @model{
   id: ID!
-  shopper-id: String!
+  shopper_id: String!
   line_items: [LineItem]
   payment: Payment @connection
 }
@@ -221,7 +221,7 @@ To list the current subscriptions:
 To unsubscribe from the subscription, say on a delete operation:
 
 #+begin_src clojure
-(gql/unsubscribe! :subscribe-chat)
+(gql/unsubscribe! :subscribe-cart)
 #+end_src
 
 =amplitude= also provides idiomatic APIs to search and filter. The
