@@ -116,6 +116,7 @@ To create a =cart= record, we just do:
               :shape [:id]
               :on-create (fn [{:keys [id]}]
                           (gql/subscribe! :cart
+                                          {:id :id}
                                           (fn [updated-cart]
                                             (rf/dispatch ::events/cart updated-cart))))})
 #+END_SRC
