@@ -161,6 +161,7 @@ We assume here that "payment-processor" AWS Lambda is already
 provisioned and deployed.
 The function name can be suffixed with a "-{env}" template variable
 too, if needed.
+Okay, let us now trigger "pay".
 
 #+BEGIN_SRC clojure
 (gql/resolve! :pay
@@ -208,7 +209,6 @@ like this
  Having these mutations get resolved via tiny Lambda processes (in any
  language) makes to easier to write bite-sized business-logic code or
  mutations in an efficient way.
-
 
 Meanwhile, we have the frontend cljs app subscribe to updates on
 the cart. When the payment-processor lambda mutates the cart, the
