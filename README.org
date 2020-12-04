@@ -1,5 +1,6 @@
 Amplifying Clojurescript on AWS.
-=amplitude= provides a set of utilities to work with amplify-js seemlessly
+=amplitude= provides a set of utilities to work with core amplify-js
+modules, seemlessly.
 
 * Getting Started
 
@@ -340,6 +341,16 @@ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 See the License for the specific language governing permissions and
 limitations under the License.
 
+* Features in the Pipeline
+
+- [ ] Schema migrations and deploy Graphql schemas programatically to
+  Appsync
+- [ ] Tests and examples
+- [ ] Better API documentation
+
+Caveat: The goal of this library is not to provide a complete set of
+wrappers over amplifyjs. Instead, provide a robust set of abstractions
+over commonly used modules (Graphql, Storage, Cache)
 
 * Thanks
 
