@@ -196,9 +196,9 @@ like this
  mutations in an efficient way.
 
 
-Meanwhile, we had the frontend cljs app subscribe to updates on
+Meanwhile, we have the frontend cljs app subscribe to updates on
 the cart. When the payment-processor lambda mutates the cart, the
-subscription handler fn gets invoked. Subscriptions are basically
+subscription handler-fn gets invoked. Subscriptions are basically
 websocket connections for specific changes to the subscribed entity.
 
 To list the current subscriptions:
@@ -221,7 +221,7 @@ simplest form is =gql/list=
           {:filter {:cart-id {:eq "cart1"}}
            :shape [:id [:card [:name]]]
            :limit 100
-           :on-list #(rf/dispatch ::to-some-fx)})
+           :on-list #(rf/dispatch ::to-some-fx records)})
 #+end_src
 
 Notice that =filter= takes a map that supports most graphql filters (eq,
@@ -251,7 +251,9 @@ type Cart @model
 #+end_src
 
 The =@key= directive defines GSI with a key and a sort-key. In this
-case, the sort-key is createdAt
+case, the sort-key is createdAt. createdAt and updatedAt are
+auto-filled by default via Appsync. There is no need to manage
+timestamps explicitly.
 
 #+begin_src clojure
 (gql/search :cart
