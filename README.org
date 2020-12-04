@@ -12,9 +12,12 @@ Add following to deps.edn or your cljs deps file
 Install amplify-cli. See here to get started
 https://docs.amplify.aws/cli/start/install
 
-This library expects some familiarity with getting amplify set up and
-have a local src/aws-exports.js to play with. The aws-exports.js file
-contains the resource identifiers, urls and keys needed to invoke the apis.
+This library expects some familiarity with getting started with AWS
+Amplify. It also expects to have a local src/aws-exports.js to load
+and invoke the APIs.
+The aws-exports.js file contains the resource identifiers, urls and
+keys needed to invoke Graphql queries, storage requests etc.
+
 
 * API
 
@@ -224,7 +227,7 @@ flows using cognito
 
 If the application needs to talk to REST API that is authenticated and
 authorized by Cognito, we can get the =jwt-token= for the Authenticated
-user as follows
+user as follows.
 
 #+begin_src clojure
 (auth/fetch-user-info)
