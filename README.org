@@ -197,7 +197,20 @@ explicit payment-id field.
 
 Meanwhile, we had the frontend cljs app subscribe to updates on
 the cart. When the payment-processor lambda mutates the cart, the
-subscription handler fn gets invoked.
+subscription handler fn gets invoked. Subscriptions are basically
+websocket connections for specific changes to the subscribed entity.
+
+To list the current subscriptions:
+#+begin_src clojure
+(gql/list-subs)
+=> [{:status :ready :sub-id :subscribe-cart}]
+#+end_src
+
+To unsubscribe from the subscription, say on a delete operation:
+
+#+begin_src clojure
+(gql/unsubscribe! :subscribe-chat)
+#+end_src
 
 =amplitude= also provides idiomatic APIs to search and filter. The
 simplest form is =gql/list=
