@@ -151,9 +151,11 @@ too, if needed.
 #+BEGIN_SRC clojure
 (gql/resolve! :pay
               {:input-schema {:cart-id :String
-                              :card-id :String}
+                              :card-id :String
+                              :amount :Int}
                :input        {:cart-id "xxx"
-                              :card-id "card-123"}
+                              :card-id "card-123"
+                              :amount 100}
                :on-resolve   (fn [record] (rf/dispatch :cart %))})
 #+END_SRC
 
@@ -163,8 +165,19 @@ and associate the payment-id with the cart. Assuming we are running
 cljs+amplitude in the lambda, we could do the following in the Lambda
 function
 
-#+begin_src clojure
+The payment-processor lambda gets an input event that looks something
+like this
 
+#+begin_src js
+{"arguments": {"card-id": "card-123", "cart-id" "xxx", "amount": 100},
+ "fieldName": "pay"}
+ #+end_src
+
+ Having these mutations get resolved via tiny Lambda processes (in any
+ language) makes to easier to write bite-sized business-logic code or
+ mutations in an efficient way.
+
+#+begin_src clojure
 (gql/create! :payment
              {:input     {:cart-id "xxx"
                           :card-id* "card123"}
@@ -242,6 +255,9 @@ to return. In the above example, =on-search= returns a vector of maps
 #+begin_src clojure
 [{:id "xx" :shopper-id  "my-shopper-id" :payment {:card {:name "my-card"}}}]
 #+end_src
+
+gql/list and gql/search also support pagination. It returns a token
+that can be passed as a param in a loop/recur
 
 ** Cognito-based Authentication
 
