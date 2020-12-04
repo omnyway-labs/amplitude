@@ -1,0 +1,38 @@
+/out/
+/resources/public/js/compiled/
+/target/
+/*-init.clj
+/*.log
+/.cpcache/
+.DS_Store
+.*.icloud
+.#*
+
+# Leiningen
+/.lein-*
+/.nrepl-port
+
+# Node.js dependencies
+/node_modules/
+
+# shadow-cljs cache, port files
+/.shadow-cljs/
+
+#amplify
+amplify/\#current-cloud-backend
+amplify/.config/local-*
+amplify/mock-data
+amplify/backend/amplify-meta.json
+amplify/backend/awscloudformation
+build/
+dist/
+node_modules/
+aws-exports.js
+awsconfiguration.json
+amplifyconfiguration.json
+amplify-build-config.json
+amplify-gradle-config.json
+amplifyxc.config
+example/.cpcache/
+example/.shadow-cljs/
+example/public/js/
