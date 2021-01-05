@@ -341,22 +341,22 @@ S3 Storage.
 #+BEGIN_SRC clojure
 
 (storage/put key
-             data
-             progress-callback
-             on-success
-             on-error
-             :options {:level "private"
-                       :contentType "text/plain"})
+             {:data        data
+              :progress-fn progress-callback
+              :on-success  on-success-fn
+              :on-error    on-error-fn
+              :options     {:level       "private"
+                            :contentType "text/plain"}})
 
 ;; Example
 
 (storage/put "foo/bar/baz.csv"
-             data
-             (fn [pct] (rf/dispatch ::events/progress pct))
-             on-success
-             on-error
-             :options {:level "private"
-                       :contentType "text/plain"})
+             {:data        data
+              :progress-fn (fn [pct] (rf/dispatch ::events/progress pct))
+              :on-success  on-success-fn
+              :on-error    on-error
+              :options     {:level       "private"
+                            :contentType "text/plain"}})
 #+END_SRC
 
 and =storage/get= to retrive the key
