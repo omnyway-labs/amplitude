@@ -40,16 +40,25 @@
       (.then log/info)
       (.catch log/error)))
 
-(defn put [key data progress-fn on-success on-failure]
+(defn put [key
+           {:keys [data
+                   progress-fn
+                   on-success
+                   on-error
+                   options]
+            :or {progress-fn log/debug
+                 on-success log/debug
+                 on-error log/debug}}]
   (log/info :put {:key key})
   (-> (.put Storage key data
-        (clj->js {"progressCallback"
-                  (fn [progress]
-                    (let [p (u/pct (-> progress .-loaded)
-                                   (-> progress .-total))]
-                      (progress-fn p)))}))
+        (clj->js (merge {"progressCallback"
+                         (fn [progress]
+                           (let [p (u/pct (-> progress .-loaded)
+                                 (-> progress .-total))]
+                             (progress-fn p)))}
+                        options)))
       (.then  #(on-success %))
-      (.catch #(on-failure %))))
+      (.catch #(on-error %))))
 
 (defn init! []
   :ok)
