@@ -8,7 +8,7 @@ Add following to deps.edn or your cljs deps file
 #+begin_src clojure
 {:deps {omnyway-labs/amplitude
         {:git/url "https://github.com/omnyway-labs/amplitude.git"
-         :sha "7d39971d89780c20c64ce34277b3a8c276704b16"}}}
+         :sha "016274a2086818b1a540adc13f4fdf22b7021b5b"}}}
 #+end_src
 
 Install amplify-cli and get started
