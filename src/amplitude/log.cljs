@@ -1,37 +1,42 @@
 (ns amplitude.log
-  (:require-macros
-   [lambdaisland.glogi :as l])
   (:require
    [amplitude.util :as u]
-   [lambdaisland.glogi :as log]
-   [lambdaisland.glogi.console :as glogi-console]))
+   ["aws-amplify" :refer [Logger]]))
+
+(def logger (Logger. "amplitude" "DEBUG"))
 
 (defonce stash (atom nil))
 
 (defn info
-  ([msg] (log/info :lambdaisland.glogi/logger msg))
+  ([msg]
+   (.info logger msg))
   ([key msg]
-   (log/info key msg)))
+   (cond
+     (and (map? key) (map? msg))
+     (info (pr-str (merge key msg)))
 
-(defn error
-  ([msg] (log/error :default msg))
-  ([key msg]
-   (log/error key msg)))
+     (and (keyword? key) (map? msg))
+     (info (pr-str {key msg}))
+
+     (or (keyword? key) (string? key))
+     (info (u/clj->json {key msg}))
+
+     :else (info msg))))
 
 (defn debug
-  ([msg] (log/debug :default msg))
+  ([msg]
+   (.debug logger msg))
   ([key msg]
-   (log/debug key msg)))
+   (.debug logger (u/clj->json {key msg}))))
 
-(defn spy [expr] (log/spy expr))
+(defn error
+  ([msg] (.error logger msg))
+  ([key msg]
+   (.error logger (u/clj->json {key msg}))))
 
 (defn stash!
   ([] @stash)
   ([thing] (reset! stash thing)))
 
-(defn init!
-  ([] (init! {}))
-  ([log-levels]
-   (glogi-console/install!)
-   (log/set-levels
-    (merge {:glogi/root :info} log-levels))))
+(defn init! []
+  :ok)
