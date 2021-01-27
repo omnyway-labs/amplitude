@@ -11,6 +11,7 @@
 
 (defn fake? [thing]
   (cond
+    (inst? thing)    false
     (boolean? thing) false
     (int? thing)     false
     (nil? thing)     true
