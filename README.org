@@ -293,7 +293,6 @@ flows using cognito
 
 #+BEGIN_SRC clojure
 (:require [amplitude.auth :as auth])
-(auth/init!)
 (auth/sign-in {:username xxx :password xxx})
 (auth/sign-out)
 #+END_SRC
