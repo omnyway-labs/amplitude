@@ -287,6 +287,7 @@
          (fn [res]
            (-> (u/as-edn res)
                (get-in [:data (csk/->camelCaseKeyword mutation-id)])
+               (u/kebab-map)
                (on-resolve))))
         (.catch
          (fn [res]
