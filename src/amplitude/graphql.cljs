@@ -277,8 +277,7 @@
 (defn resolve! [mutation-id {:keys [input-schema input
                                     on-resolve on-error
                                     shape]}]
-  (let [shape      (map csk/->snake_case_keyword shape)
-        query      (schema/custom-mutation mutation-id input-schema shape)
+  (let [query      (schema/custom-mutation mutation-id input-schema shape)
         param      (clj->js (u/snake-map input))
         op         (api/graphqlOperation query param)
         on-resolve (or on-resolve identity)
