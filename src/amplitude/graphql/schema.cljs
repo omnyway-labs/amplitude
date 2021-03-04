@@ -18,10 +18,12 @@
                  coll))
 
 (defn as-shape [fields]
-  (transform-keys (fn [field]
-                    (keyword
-                     (str/replace (name field) #"-" "_")))
-                  fields))
+  (letfn [(xform [thing]
+            (if (keyword? thing)
+              (keyword
+               (str/replace (name thing) #"-" "_"))
+              thing))]
+    (transform-keys xform fields)))
 
 (defn method-name [op entity]
   (if (= op :list)
