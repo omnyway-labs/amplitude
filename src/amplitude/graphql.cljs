@@ -38,7 +38,7 @@
               (-> (u/->snake-case k)
                   (keyword))))]
     (reduce-kv #(assoc %1 (as-input-key entity %2) %3)
-               {} (u/remove-nils param))))
+               {} param)))
 
 (defn- xform-filter [expr]
   (cond
