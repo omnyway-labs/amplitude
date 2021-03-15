@@ -294,4 +294,5 @@
            (let [{:keys [errors]} (u/as-edn res)]
              (on-error (-> errors first :message))
              (log/error ::resolve {:errors errors
+                                   :mutation mutation-id
                                    :res    res})))))))
