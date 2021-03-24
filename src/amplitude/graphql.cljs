@@ -212,8 +212,8 @@
                   sort-direction "DESC"
                   key-type       :String
                   limit          500}}]
-  (log/info ::search {:entity entity
-                      :query-field query-field})
+  (log/debug ::search {:entity entity
+                       :query-field query-field})
   (when (and key value query-field)
     (invoke {:op         :search
              :query      (schema/search entity query-field key {:shape    shape
