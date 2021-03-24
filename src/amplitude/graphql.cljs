@@ -142,6 +142,66 @@
                                (cache/put cache-key items))
                              (on-list items))}))))
 
+(defonce paged-items (atom []))
+
+(defn page! [page]
+  (swap! paged-items concat page))
+
+(defn- search* [entity
+                {:keys [query-field
+                        key
+                        shape
+                        key-type
+                        value
+                        on-search]
+                 :as opts}
+                next-token]
+  (invoke {:op         :search
+           :query      (schema/search entity
+                                      query-field
+                                      key
+                                      {:shape    shape
+                                       :key-type key-type})
+           :entity     query-field
+           :param      {(u/->snake-case key) value
+                        :sortDirection       "DESC"
+                        :limit               300
+                        :nextToken           next-token}
+           :on-success (fn [{:keys [items nextToken]}]
+                         (cond
+                           (not (empty? nextToken))
+                           (do
+                             (page! items)
+                             (search* entity opts nextToken))
+
+                           (and (empty? nextToken)
+                                (not (empty? items)))
+                           (do
+                             (log/info ::paginated-search
+                                       {:token nextToken
+                                        :items (count items)
+                                        :total (count @paged-items)})
+                             (page! items)
+                             (on-search @paged-items))
+
+                           (empty? items)
+                           (do
+                             (on-search @paged-items)
+                             (log/info ::done (count @paged-items)))))}))
+
+(defn search-all
+  "Is expensive and slurps the entire data into memory.
+  Good for small and shallow shape of data"
+  [entity {:keys [key value query-field]
+           :as   opts
+           :or   {on-search      log/stash!
+                  sort-direction "DESC"
+                  key-type       :String}}]
+  (when-not (or (nil? @paged-items)
+                (pos? (count @paged-items)))
+    (reset! paged-items nil)
+    (search* entity opts nil)))
+
 (defn search
   [entity {:keys [key value on-search shape
                   key-type
@@ -152,6 +212,8 @@
                   sort-direction "DESC"
                   key-type       :String
                   limit          500}}]
+  (log/info ::search {:entity entity
+                      :query-field query-field})
   (when (and key value query-field)
     (invoke {:op         :search
              :query      (schema/search entity query-field key {:shape    shape
