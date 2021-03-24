@@ -202,6 +202,9 @@
     (reset! paged-items nil)
     (search* entity opts nil)))
 
+(defn reset-paged-items! []
+  (reset! paged-items []))
+
 (defn search
   [entity {:keys [key value on-search shape
                   key-type
