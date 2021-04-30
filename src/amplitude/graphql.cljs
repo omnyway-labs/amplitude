@@ -67,13 +67,19 @@
       :filter (when filter (xform-filter filter))
       :limit  (or limit 100)})))
 
-(defn- invoke* [query-str param on-success on-error]
-  (let [operation (if (empty? param)
+(defn- invoke*
+  ([query-str param]
+   (let [operation (if (empty? param)
                     (api/graphqlOperation query-str)
                     (api/graphqlOperation query-str (clj->js param)))]
-    (-> (.. API (graphql operation))
-        (.then on-success)
-        (.catch on-error))))
+     (.. API (graphql operation))))
+  ([query-str param on-success on-error]
+   (let [operation (if (empty? param)
+                     (api/graphqlOperation query-str)
+                     (api/graphqlOperation query-str (clj->js param)))]
+     (-> (.. API (graphql operation))
+         (.then on-success)
+         (.catch on-error)))))
 
 (defn default-on-error [xs]
   (log/error ::gql-error xs))
