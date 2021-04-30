@@ -79,22 +79,26 @@
   (log/error ::gql-error xs))
 
 (defn- invoke
-  [{:keys [op query entity param on-success on-error]
-    :or   {on-error default-on-error}}]
+  [{:keys [op query entity param on-success on-error
+           return-promise?]
+    :or   {on-error default-on-error
+           return-promise? false}}]
   (let [param (xform-param op entity param)]
-    (invoke* query
-             param
-             (fn [data]
-               (->> (xform-output data op entity)
-                    (on-success)))
-             (fn [res]
-               (let [{:keys [errors]} (u/as-edn res)]
-                 (on-error
-                  {:errors (or errors res)
-                   :op     op
-                   :query  query
-                   :entity entity
-                   :param  param}))))))
+    (if return-promise?
+      (invoke* query param)
+      (invoke* query
+               param
+               (fn [data]
+                 (->> (xform-output data op entity)
+                      (on-success)))
+               (fn [res]
+                 (let [{:keys [errors]} (u/as-edn res)]
+                   (on-error
+                    {:errors (or errors res)
+                     :op     op
+                     :query  query
+                     :entity entity
+                     :param  param})))))))
 
 (defn- as-cache-key [entity]
   (-> (u/dashed :list entity)
@@ -167,18 +171,19 @@
 
 (defn get
   [entity {:keys [input on-get invalidate-cache? shape
-                  on-error]
-           :or   {on-get log/stash!
+                  on-error return-promise?]
+           :or   {on-get   log/stash!
                   on-error default-on-error}}]
-  (invoke {:op         :get
-           :entity     entity
-           :query      (schema/get entity shape)
-           :param      {:input input}
-           :on-success (fn [record]
+  (invoke {:op              :get
+           :entity          entity
+           :query           (schema/get entity shape)
+           :param           {:input input}
+           :return-promise? return-promise?
+           :on-success      (fn [record]
                          (when invalidate-cache?
                            (delete-cache! entity))
                          (on-get record))
-           :on-error   on-error}))
+           :on-error        on-error}))
 
 (defn delete!
   [entity {:keys [input on-delete
