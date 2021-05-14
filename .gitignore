@@ -36,3 +36,7 @@ amplifyxc.config
 example/.cpcache/
 example/.shadow-cljs/
 example/public/js/
+
+# IntelliJ
+.idea/
+*.iml
