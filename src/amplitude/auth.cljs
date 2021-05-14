@@ -42,6 +42,36 @@
            (fn [data]
              (.-event (.-payload data)))))
 
+; get the current session, the underlying Amplify library will automatically refresh the session if necessary
+(defn current-session [{:keys [callback-fn on-error]}]
+  (.. Auth
+      (currentSession)
+      (then
+        (fn [user]
+          (let [is-valid (js-invoke user "isValid" [])
+                access-token-payload (-> (aget user "accessToken")
+                                         (aget "payload"))
+                username (aget access-token-payload "username")
+                sub (aget access-token-payload "sub")
+                id-token (aget user "idToken")
+                attrs (-> (aget id-token "payload")
+                          (js->clj :keywordize-keys true))
+                token (aget id-token "jwtToken")
+
+                data (merge attrs
+                            {:username username
+                             :uid      sub
+                             :token    token
+                             :is-valid is-valid})]
+
+            (callback-fn data))))
+      (catch
+        (fn [response]
+          (let [err (-> (js->clj response)
+                        (walk/keywordize-keys))]
+            (on-error err) err)))
+      ))
+
 (defn fetch-user-info []
   (let [user (aget Auth "user")
         username (aget user "username")
