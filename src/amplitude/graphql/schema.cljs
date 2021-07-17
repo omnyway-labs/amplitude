@@ -81,7 +81,7 @@
                       :nextToken                    :$nextToken
                       :limit                        :$limit
                       :filter                       :$filter}
-                     [[:items (as-shape shape)]]]]}))))
+                     [[:items (as-shape shape)] :nextToken]]]}))))
 
 (defn list [entity shape]
   (when-not (empty? shape)
