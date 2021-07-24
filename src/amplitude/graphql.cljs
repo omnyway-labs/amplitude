@@ -325,17 +325,17 @@
                                      :shape     shape})
                            (on-find (first items))))}))
 
-(defn subscribe! [sub-id  {:keys [input on-change shape]}]
+(defn subscribe! [sub-id  {:keys [input on-change shape on-error]}]
   (if (empty? input)
     (let [query (schema/subscription sub-id shape)
           op    (api/graphqlOperation query)]
-      (-> (sub/subscribe! op sub-id on-change)
+      (-> (sub/subscribe! op sub-id on-change on-error)
           (sub/lock! query sub-id)))
     (let [query (->> (key (first input))
                      (schema/subscription sub-id shape))
           op    (->> (clj->js (u/snake-map input))
                      (api/graphqlOperation query))]
-      (-> (sub/subscribe! op sub-id on-change)
+      (-> (sub/subscribe! op sub-id on-change on-error)
           (sub/lock! query sub-id)))))
 
 (defn unsubscribe-all []

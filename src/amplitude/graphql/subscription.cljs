@@ -29,15 +29,20 @@
           (swap! last-updated assoc sub-id data)
           false))))
 
-(defn subscribe! [op sub-id callback]
-  (-> (.. API
-          (graphql op)
-          (subscribe
-            (fn [record]
-              (let [data (parse-response record sub-id)]
-                (when-not (duplicate? sub-id data)
-                  (callback data))))
-            #(log/error ::subscription-error %)))))
+(defn subscribe!
+  ([op sub-id callback error-callback]
+   (println "Subscribe with error callback")
+   (-> (.. API
+           (graphql op)
+           (subscribe
+             (fn [record]
+               (let [data (parse-response record sub-id)]
+                 (when-not (duplicate? sub-id data)
+                   (callback data))))
+             #(error-callback %)))))
+  ([op sub-id callback]
+   (println "Subscribe WITHOUT error callback")
+   (subscribe! op sub-id callback #(log/error ::subscription-error %))))
 
 (defn unsubscribe!
   ([] (doseq [[on _] @subscriptions]
