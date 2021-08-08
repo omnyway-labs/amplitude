@@ -350,23 +350,26 @@
 
 (defn resolve! [mutation-id {:keys [input-schema input
                                     on-resolve on-error
-                                    shape]}]
+                                    shape
+                                    return-promise?]}]
   (let [query      (schema/custom-mutation mutation-id input-schema shape)
         param      (clj->js (u/snake-map input))
         op         (api/graphqlOperation query param)
         on-resolve (or on-resolve identity)
         on-error   (or on-error identity)]
-    (-> (.. API (graphql op))
-        (.then
-         (fn [res]
-           (-> (u/as-edn res)
-               (get-in [:data (csk/->camelCaseKeyword mutation-id)])
-               (u/kebab-map)
-               (on-resolve))))
-        (.catch
-         (fn [res]
-           (let [{:keys [errors]} (u/as-edn res)]
-             (on-error (-> errors first :message))
-             (log/error ::resolve {:errors errors
-                                   :mutation mutation-id
-                                   :res    res})))))))
+    (if return-promise?
+      (.. API (graphql op))
+      (-> (.. API (graphql op))
+          (.then
+           (fn [res]
+             (-> (u/as-edn res)
+                 (get-in [:data (csk/->camelCaseKeyword mutation-id)])
+                 (u/kebab-map)
+                 (on-resolve))))
+          (.catch
+           (fn [res]
+             (let [{:keys [errors]} (u/as-edn res)]
+               (on-error (-> errors first :message))
+               (log/error ::resolve {:errors   errors
+                                     :mutation mutation-id
+                                     :res      res}))))))))
