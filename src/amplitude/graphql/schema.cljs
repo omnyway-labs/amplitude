@@ -127,7 +127,8 @@
                       (as-shape shape)]]}))))
   ([sub-id shape key]
    (let [op-name  (csk/->PascalCase sub-id)
-         key      (csk/->snake_case_keyword key)
+         ;; Snake case turns :productId into product_id which doesn't match the API field names. Use camelCase for now.
+         key      (csk/->camelCase key) #_(csk/->snake_case_keyword key)
          variable (keyword (str "$" (name key)))]
      (when-not (empty? shape)
        (graphql-query
